@@ -8,7 +8,7 @@ CREATE TABLE users (
   id         INT AUTO_INCREMENT PRIMARY KEY,
   email      VARCHAR(255) NOT NULL UNIQUE,
   password   VARCHAR(255) NOT NULL,
-  role       VARCHAR(50)  NOT NULL ENUM('ADMIN', 'USER'),
+  role       VARCHAR(50)  NOT NULL,
   verified   BOOLEAN NOT NULL DEFAULT FALSE,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -29,7 +29,7 @@ CREATE TABLE projects (
 CREATE TABLE category (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL
-)
+);
 
 -- Une virgule ou une parenthèse droite était attendus. (near "ENUM" at position 180)
 -- Début d'énoncé inattendu. (near "'ADMIN'" at position 186)
