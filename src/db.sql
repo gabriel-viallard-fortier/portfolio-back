@@ -16,7 +16,7 @@ CREATE TABLE projects (
   id          INT AUTO_INCREMENT PRIMARY KEY,
   title       VARCHAR(150)  NOT NULL,
   description TEXT NOT NULL,
-  category_id VARCHAR(255) NOT NULL,
+  category_id INT NOT NULL,
   tech_stack  VARCHAR(255) NOT NULL,
   github_url  VARCHAR(500),
   demo_url    VARCHAR(500),

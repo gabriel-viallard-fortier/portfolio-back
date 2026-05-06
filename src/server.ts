@@ -7,6 +7,7 @@ import validate from './middlewares/validate.js'
 import { colorize } from './utils/Colorize.js'
 import { hostname } from 'node:os'
 import authRoutes from './routes/auth.routes.js'
+import projectsRoutes from './routes/projects.routes.js'
 
 // Initialiser l'application Express
 const app: Application = express()
@@ -45,6 +46,8 @@ app.use(cors(corsOptions))
 
 // Définir les routes
 app.use('/auth', authRoutes)
+app.use('/projects', projectsRoutes)
+
 // Fonction principale pour démarrer le serveur
 async function startServer () {
   console.log(
