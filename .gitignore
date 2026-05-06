@@ -9,6 +9,6 @@
 *.log
 *.log.*
 *.sig
-.env*
+.env
 pkg/
 node_modules/

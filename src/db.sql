@@ -9,7 +9,6 @@ CREATE TABLE users (
   email      VARCHAR(255) NOT NULL UNIQUE,
   password   VARCHAR(255) NOT NULL,
   role       VARCHAR(50)  NOT NULL,
-  verified   BOOLEAN NOT NULL DEFAULT FALSE,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -30,9 +29,3 @@ CREATE TABLE category (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL
 );
-
--- Une virgule ou une parenthèse droite était attendus. (near "ENUM" at position 180)
--- Début d'énoncé inattendu. (near "'ADMIN'" at position 186)
--- Début d'énoncé inattendu. (near "'USER'" at position 195)
--- Début d'énoncé inattendu. (near "verified" at position 206)
--- Type d'énoncé non reconnu. (near "BOOLEAN" at position 217)
