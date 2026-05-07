@@ -8,6 +8,7 @@ import { colorize } from './utils/Colorize.js'
 import { hostname } from 'node:os'
 import authRoutes from './routes/auth.routes.js'
 import projectsRoutes from './routes/projects.routes.js'
+import categoriesRoutes from './routes/categories.routes.js'
 
 // Initialiser l'application Express
 const app: Application = express()
@@ -17,7 +18,12 @@ const PORT = process.env.PORT || 3000 // Utiliser le port de l'environnement ou 
 app.use(express.json())
 
 // Configuration CORS
-const whitelist: (string | undefined)[] = [process.env.FRONT_URL] // Liste des origines autorisées
+const whitelist = [
+  process.env.FRONT_URL,
+  'http://localhost:5173',
+  'http://localhost:5174',
+  'http://localhost:5175'
+]
 
 const corsOptions: CorsOptions = {
   origin: (origin, callback) => {
@@ -25,7 +31,7 @@ const corsOptions: CorsOptions = {
     if (!origin) return callback(null, true)
 
     // Vérifier si l'origine est dans la liste blanche
-    if (whitelist.includes(process.env.FRONT_URL)) return callback(null, true)
+    if (whitelist.includes(origin)) return callback(null, true)
 
     // Autoriser les adresses IP locales pour le développement
     if (
@@ -33,9 +39,6 @@ const corsOptions: CorsOptions = {
       origin.startsWith('http://192.168.')
     )
       return callback(null, true)
-
-    // Autoriser l'origine de développement React
-    if (origin === 'http://localhost:5173') return callback(null, true)
 
     callback(new Error('Not allowed by CORS')) // Bloquer les autres origines
   },
@@ -46,6 +49,7 @@ app.use(cors(corsOptions))
 
 // Définir les routes
 app.use('/auth', authRoutes)
+app.use('/categories', categoriesRoutes)
 app.use('/projects', projectsRoutes)
 
 // Fonction principale pour démarrer le serveur

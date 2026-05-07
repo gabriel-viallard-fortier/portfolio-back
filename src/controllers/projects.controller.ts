@@ -1,20 +1,21 @@
 import type { Request, Response } from 'express'
 import type ProjectData from '../types/projects.types.js'
 import {
-  findOne,
-  findAll,
-  addOne,
-  updateOne
-} from '../models/projects.model.js'
+  getOne,
+  getAll,
+  create,
+  update,
+  deleteOne
+} from '../services/projects.service.js'
 
-const getAll = async (req: Request, res: Response) => {
-  const data = await findAll()
-  return res.status(200).send(data)
+const getAllProjects = async (req: Request, res: Response) => {
+  const allProjects = await getAll()
+  return res.json(allProjects)
 }
 
-const getOne = async (req: Request, res: Response) => {
+const getOneProject = async (req: Request, res: Response) => {
   //   on verifie que l'id est un nombre
-  const idStr = req.query.id as string
+  const idStr = req.params.id as string
 
   if (!idStr || isNaN(Number(idStr))) {
     return res.status(400).send({
@@ -23,24 +24,19 @@ const getOne = async (req: Request, res: Response) => {
   }
 
   const id = Number(idStr)
-
-  const data = await findOne(id)
-  if (!data) return res.status(404).send({ message: 'Projet non trouvé' })
-  console.log(data)
-  return res.status(200).send(data)
+  const data = await getOne(id)
+  return res.json(data)
 }
 
-const create = async (req: Request, res: Response) => {
+const createProject = async (req: Request, res: Response) => {
   const p = req.body as ProjectData
-  const result = await addOne(p)
-  return res
-    .status(201)
-    .send({ message: 'Project created successfully', data: result })
+  const result = await create(p)
+  return res.json({ message: 'Project created successfully', data: result })
 }
 
-const update = async (req: Request, res: Response) => {
+const updateProject = async (req: Request, res: Response) => {
   // On verifie que l'id est un nombre
-  const idStr = req.query.id as string
+  const idStr = req.params.id as string
 
   if (!idStr || isNaN(Number(idStr))) {
     return res.status(400).send({
@@ -48,17 +44,26 @@ const update = async (req: Request, res: Response) => {
     })
   }
   const id = Number(idStr)
-
-  // Validation du corps de la requête
-  if (!req.body || typeof req.body !== 'object') {
-    return res.status(400).send({
-      message: 'Le corps de la demande doit être un objet JSON valide.'
-    })
-  }
   const p = req.body as ProjectData
 
-  const data = await updateOne(id, p)
-  return res.status(200).send({ message: 'Projet modifié', data })
+  const data = await update(id, p)
+  return res.json({ message: 'Projet modifié', data })
 }
 
-export { getOne, getAll, create, update }
+const deleteOneProject = async (req: Request, res: Response) => {
+  const idStr = req.params.id as string
+  if (!idStr || isNaN(Number(idStr))) {
+    return res.status(400).send({ message: "L'ID doit être un nombre valide." })
+  }
+  const id = Number(idStr)
+  const result = await deleteOne(id)
+  return res.status(200).send({ message: 'Projet supprimé' })
+}
+
+export {
+  getOneProject,
+  getAllProjects,
+  createProject,
+  updateProject,
+  deleteOneProject
+}

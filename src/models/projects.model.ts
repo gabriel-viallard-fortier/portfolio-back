@@ -4,14 +4,13 @@ import type ProjectData from '../types/projects.types.js'
 const findAll = async () => {
   const sql = `SELECT * FROM projects ORDER BY created_at DESC`
   const [rows]: any = await db.pool.query(sql)
-  if (rows.length > 0) return rows
-  return null
+  return rows || []
 }
 
 const findOne = async (id: number) => {
   const sql = `SELECT * FROM projects WHERE id=?`
-  const rows: any = await db.pool.query(sql, [id])
-  return rows
+  const [rows]: any = await db.pool.query(sql, [id])
+  return rows[0] || null
 }
 
 const addOne = async (projectData: ProjectData) => {
@@ -40,4 +39,11 @@ const updateOne = async (id: number, projectData: ProjectData) => {
     id
   ])
 }
-export { findOne, findAll, addOne, updateOne }
+
+const removeOne = async (id: number): Promise<boolean | null> => {
+  const sql = 'DELETE FROM projects WHERE id=?'
+  const [result]: any = await db.pool.query(sql, [id])
+  return result.affectedRows > 0
+}
+
+export { findAll, findOne, addOne, updateOne, removeOne }

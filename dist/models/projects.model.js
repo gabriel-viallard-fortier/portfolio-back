@@ -1,0 +1,43 @@
+import db from '../config/database.js';
+const findAll = async () => {
+    const sql = `SELECT * FROM projects ORDER BY created_at DESC`;
+    const [rows] = await db.pool.query(sql);
+    return rows || [];
+};
+const findOne = async (id) => {
+    const sql = `SELECT * FROM projects WHERE id=?`;
+    const [rows] = await db.pool.query(sql, [id]);
+    return rows[0] || null;
+};
+const addOne = async (projectData) => {
+    const sql = `INSERT INTO projects (title, description, category_id, tech_stack, github_url, demo_url, image_url) VALUES (?, ?, ?, ?, ?, ?, ?)`;
+    return await db.pool.query(sql, [
+        projectData.title,
+        projectData.description,
+        projectData.category_id,
+        projectData.tech_stack,
+        projectData.github_url,
+        projectData.demo_url,
+        projectData.image_url
+    ]);
+};
+const updateOne = async (id, projectData) => {
+    const sql = `UPDATE projects SET title=?, description=?, category_id=?, tech_stack=?, github_url=?, demo_url=?, image_url=? WHERE id=?`;
+    return await db.pool.query(sql, [
+        projectData.title,
+        projectData.description,
+        projectData.category_id,
+        projectData.tech_stack,
+        projectData.github_url,
+        projectData.demo_url,
+        projectData.image_url,
+        id
+    ]);
+};
+const removeOne = async (id) => {
+    const sql = 'DELETE FROM projects WHERE id=?';
+    const [result] = await db.pool.query(sql, [id]);
+    return result.affectedRows > 0;
+};
+export { findAll, findOne, addOne, updateOne, removeOne };
+//# sourceMappingURL=projects.model.js.map
